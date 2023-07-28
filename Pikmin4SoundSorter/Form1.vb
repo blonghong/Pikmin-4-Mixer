@@ -1,18 +1,13 @@
 ﻿Imports System.IO
-Imports NAudio.FileFormats
-Imports System.Reflection
 Imports NAudio.Wave
 Imports NAudio.Wave.SampleProviders
 Imports Newtonsoft.Json
 Imports System.ComponentModel
+Imports NAudio.Wave.Compression
 
 Public Class Form1
     Dim FileList As New List(Of String)()
     Dim FileDict As Dictionary(Of String, String)
-    Private Sub LstFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LstFiles.SelectedIndexChanged
-
-    End Sub
-
     Private Sub LstFiles_DragEnter(sender As Object, e As DragEventArgs) Handles LstFiles.DragEnter
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             e.Effect = DragDropEffects.Copy
@@ -25,13 +20,20 @@ Public Class Form1
     Private Sub LstFiles_DragDrop(sender As Object, e As DragEventArgs) Handles LstFiles.DragDrop
         If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Exit Sub
         Dim Files As String() = e.Data.GetData(DataFormats.FileDrop)
+        If Files.Length = 0 Then Exit Sub
 
+        ' If only one folder was dropped, use that folder
+        If Files.Length = 1 AndAlso Directory.Exists(Files(0)) Then
+            Files = Directory.GetFiles(Files(0))
+        End If
+
+        ' Validate all items
         Dim WarningShown = False
         For Each f In Files
             If Not File.Exists(f) Then Continue For
             If Path.GetExtension(f).ToLower() <> ".wav" Then
                 If Not WarningShown Then
-                    MsgBox("Only WAV files are supported")
+                    MessageBox.Show("Only WAV files are supported, you can use the converter in the menu bar to convert WEM to WAV.", "Invalid File")
                     WarningShown = True
                 End If
                 Continue For
@@ -236,7 +238,7 @@ Public Class Form1
                         SoundOut.Play()
                     End Sub
 
-                PnlGroups.Controls.Add(Lst)
+            PnlGroups.Controls.Add(Lst)
         Next
     End Sub
     Function NewMixer(Wavs As IEnumerable(Of AudioFileReader)) As MixingSampleProvider
@@ -260,11 +262,20 @@ Public Class Form1
 
     Private Sub LstFiles_KeyDown(sender As Object, e As KeyEventArgs) Handles LstFiles.KeyDown
         If e.KeyCode = Keys.Delete Then
-            Dim i = LstFiles.SelectedIndex
-            If i > -1 AndAlso i < LstFiles.Items.Count Then
-                FileList.RemoveAt(i)
-                LstFiles.Items.RemoveAt(i)
-            End If
+            Dim ToDelete = New List(Of Integer)()
+            For Each i In LstFiles.SelectedIndices
+                ToDelete.Add(i)
+            Next
+            ToDelete.Sort()
+            Dim Offset = 0
+            For Each i In ToDelete
+                Dim ii = i - Offset
+                If ii > -1 AndAlso ii < LstFiles.Items.Count Then
+                    FileList.RemoveAt(ii)
+                    LstFiles.Items.RemoveAt(ii)
+                End If
+                Offset += 1
+            Next
         End If
     End Sub
     Sub UpdateVolume(WAV As AudioFileReader, Volume As Integer)
@@ -293,6 +304,27 @@ Public Class Form1
         If FileDict Is Nothing Then
             FileDict = New Dictionary(Of String, String)()
         End If
+
+
+        Dim proc As New Process With {.EnableRaisingEvents = True, .StartInfo = New ProcessStartInfo With {
+            .CreateNoWindow = True,
+            .RedirectStandardOutput = True,
+            .RedirectStandardError = True,
+            .UseShellExecute = False,
+            .WindowStyle = ProcessWindowStyle.Hidden,
+            .WorkingDirectory = "C:\Users\booge\Documents\GitHub\Pikmin4SoundSorter\Pikmin4SoundSorter\vgmstream",
+            .FileName = "C:\Users\booge\Documents\GitHub\Pikmin4SoundSorter\Pikmin4SoundSorter\vgmstream\vgmstream-cli.exe",
+            .Arguments = "-o ""test.wav"" ""test.wem"""
+        }}
+
+        AddHandler proc.Exited,
+                Sub()
+                    MsgBox("Finished!")
+                End Sub
+
+        'proc.Start()
+        'proc.BeginOutputReadLine()
+        'proc.BeginErrorReadLine()
     End Sub
 
     Sub SaveDict()
@@ -304,12 +336,18 @@ Public Class Form1
     End Sub
 
     Private Sub WhatDoIDoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles WhatDoIDoToolStripMenuItem.Click
-        MsgBox("Drag and drop WAV files (presumably Pikmin 4's WEM files that you converted to WAVs) onto the Left-most list box.
+        MessageBox.Show("Drag and drop WAV or WEM files (presumably from Pikmin 4) onto the left-most list box.
 
 Then click the group button to group based on duration.
 
 Double-click any of the groups to start listening to those groups all together.
-A mixer shows on the right to adjust volume of layers, and even Export your mix.")
+A mixer shows on the right to adjust volume of layers, and even export your mix.",
+"What Do I Do?")
+    End Sub
+
+    Private Sub ConvertToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ConvertToolStripMenuItem.Click
+        FormConverter.SetDesktopLocation(Left + ClientSize.Width / 2 - FormConverter.ClientSize.Width / 2, Top + ClientSize.Height / 2 - FormConverter.ClientSize.Height / 2)
+        FormConverter.ShowDialog()
     End Sub
 End Class
 

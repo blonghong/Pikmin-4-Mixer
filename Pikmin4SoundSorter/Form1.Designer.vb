@@ -26,6 +26,7 @@ Partial Class Form1
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuEditClearFiles = New System.Windows.Forms.ToolStripMenuItem()
+        Me.WhatDoIDoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BtnGroup = New System.Windows.Forms.Button()
         Me.PnlGroups = New System.Windows.Forms.FlowLayoutPanel()
         Me.LblGroups = New System.Windows.Forms.Label()
@@ -33,7 +34,7 @@ Partial Class Form1
         Me.TrkMaster = New System.Windows.Forms.TrackBar()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.BtnStop = New System.Windows.Forms.Button()
-        Me.WhatDoIDoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ConvertToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.TrkMaster, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -48,12 +49,13 @@ Partial Class Form1
         Me.LstFiles.IntegralHeight = False
         Me.LstFiles.Location = New System.Drawing.Point(12, 27)
         Me.LstFiles.Name = "LstFiles"
+        Me.LstFiles.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
         Me.LstFiles.Size = New System.Drawing.Size(120, 567)
         Me.LstFiles.TabIndex = 0
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem, Me.WhatDoIDoToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.EditToolStripMenuItem, Me.ConvertToolStripMenuItem, Me.WhatDoIDoToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(918, 24)
@@ -70,8 +72,14 @@ Partial Class Form1
         'MenuEditClearFiles
         '
         Me.MenuEditClearFiles.Name = "MenuEditClearFiles"
-        Me.MenuEditClearFiles.Size = New System.Drawing.Size(127, 22)
+        Me.MenuEditClearFiles.Size = New System.Drawing.Size(180, 22)
         Me.MenuEditClearFiles.Text = "Clear Files"
+        '
+        'WhatDoIDoToolStripMenuItem
+        '
+        Me.WhatDoIDoToolStripMenuItem.Name = "WhatDoIDoToolStripMenuItem"
+        Me.WhatDoIDoToolStripMenuItem.Size = New System.Drawing.Size(92, 20)
+        Me.WhatDoIDoToolStripMenuItem.Text = "What do I do?"
         '
         'BtnGroup
         '
@@ -143,11 +151,11 @@ Partial Class Form1
         Me.BtnStop.Text = "PAUSE"
         Me.BtnStop.UseVisualStyleBackColor = True
         '
-        'WhatDoIDoToolStripMenuItem
+        'ConvertToolStripMenuItem
         '
-        Me.WhatDoIDoToolStripMenuItem.Name = "WhatDoIDoToolStripMenuItem"
-        Me.WhatDoIDoToolStripMenuItem.Size = New System.Drawing.Size(92, 20)
-        Me.WhatDoIDoToolStripMenuItem.Text = "What do I do?"
+        Me.ConvertToolStripMenuItem.Name = "ConvertToolStripMenuItem"
+        Me.ConvertToolStripMenuItem.Size = New System.Drawing.Size(87, 20)
+        Me.ConvertToolStripMenuItem.Text = "Convert Files"
         '
         'Form1
         '
@@ -165,7 +173,7 @@ Partial Class Form1
         Me.Controls.Add(Me.MenuStrip1)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "Form1"
-        Me.Text = "Pikmin 4 WAV Manager"
+        Me.Text = "Pikmin 4 Sound Sorter"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         CType(Me.TrkMaster, System.ComponentModel.ISupportInitialize).EndInit()
@@ -186,4 +194,5 @@ Partial Class Form1
     Friend WithEvents Label1 As Label
     Friend WithEvents BtnStop As Button
     Friend WithEvents WhatDoIDoToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ConvertToolStripMenuItem As ToolStripMenuItem
 End Class
