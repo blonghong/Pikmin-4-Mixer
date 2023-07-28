@@ -1,0 +1,13 @@
+C:\Users\booge\source\repos\WAVSorterForPikmin4\WAVSorterForPikmin4\bin\Debug\WAVSorterForPikmin4.exe.config
+C:\Users\booge\source\repos\WAVSorterForPikmin4\WAVSorterForPikmin4\bin\Debug\WAVSorterForPikmin4.exe
+C:\Users\booge\source\repos\WAVSorterForPikmin4\WAVSorterForPikmin4\bin\Debug\WAVSorterForPikmin4.pdb
+C:\Users\booge\source\repos\WAVSorterForPikmin4\WAVSorterForPikmin4\bin\Debug\WAVSorterForPikmin4.xml
+C:\Users\booge\source\repos\WAVSorterForPikmin4\WAVSorterForPikmin4\obj\Debug\WAVSorterForPikmin4.vbproj.AssemblyReference.cache
+C:\Users\booge\source\repos\WAVSorterForPikmin4\WAVSorterForPikmin4\obj\Debug\WAVSorterForPikmin4.vbproj.SuggestedBindingRedirects.cache
+C:\Users\booge\source\repos\WAVSorterForPikmin4\WAVSorterForPikmin4\obj\Debug\WAVSorterForPikmin4.Form1.resources
+C:\Users\booge\source\repos\WAVSorterForPikmin4\WAVSorterForPikmin4\obj\Debug\WAVSorterForPikmin4.Resources.resources
+C:\Users\booge\source\repos\WAVSorterForPikmin4\WAVSorterForPikmin4\obj\Debug\WAVSorterForPikmin4.vbproj.GenerateResource.cache
+C:\Users\booge\source\repos\WAVSorterForPikmin4\WAVSorterForPikmin4\obj\Debug\WAVSorterForPikmin4.vbproj.CoreCompileInputs.cache
+C:\Users\booge\source\repos\WAVSorterForPikmin4\WAVSorterForPikmin4\obj\Debug\WAVSorterForPikmin4.exe
+C:\Users\booge\source\repos\WAVSorterForPikmin4\WAVSorterForPikmin4\obj\Debug\WAVSorterForPikmin4.xml
+C:\Users\booge\source\repos\WAVSorterForPikmin4\WAVSorterForPikmin4\obj\Debug\WAVSorterForPikmin4.pdb
