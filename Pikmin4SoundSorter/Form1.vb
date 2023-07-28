@@ -3,11 +3,18 @@ Imports NAudio.Wave
 Imports NAudio.Wave.SampleProviders
 Imports Newtonsoft.Json
 Imports System.ComponentModel
-Imports NAudio.Wave.Compression
+Imports Microsoft.WindowsAPICodePack.Dialogs
 
 Public Class Form1
     Dim FileList As New List(Of String)()
-    Dim FileDict As Dictionary(Of String, String)
+    Public FileDict As Dictionary(Of String, String)
+    Private DialogOpenFolder As New CommonOpenFileDialog With {.IsFolderPicker = True, .Title = "Open Folder Containing WwiseAudio WEM Files"}
+    Private DialogOpenFiles As New OpenFileDialog With {.Filter = "WwiseAudio WEM files (*.wem)|*.wem", .Title = "Open WwiseAudio WEM Files"}
+    Sub SetFormCenter(ParentForm As Form, SubjectForm As Form)
+        SubjectForm.SetDesktopLocation(ParentForm.Left + ParentForm.ClientSize.Width / 2 - SubjectForm.ClientSize.Width / 2,
+            ParentForm.Top + ParentForm.ClientSize.Height / 2 - SubjectForm.ClientSize.Height / 2)
+    End Sub
+
     Private Sub LstFiles_DragEnter(sender As Object, e As DragEventArgs) Handles LstFiles.DragEnter
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             e.Effect = DragDropEffects.Copy
@@ -20,11 +27,20 @@ Public Class Form1
     Private Sub LstFiles_DragDrop(sender As Object, e As DragEventArgs) Handles LstFiles.DragDrop
         If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Exit Sub
         Dim Files As String() = e.Data.GetData(DataFormats.FileDrop)
+        OpenFiles(Files)
+    End Sub
+
+    Sub OpenFiles(Files As String())
         If Files.Length = 0 Then Exit Sub
 
         ' If only one folder was dropped, use that folder
         If Files.Length = 1 AndAlso Directory.Exists(Files(0)) Then
             Files = Directory.GetFiles(Files(0))
+        End If
+
+        ' last file list settings
+        If My.Settings.LastFileList Is Nothing Then
+            My.Settings.LastFileList = New Specialized.StringCollection()
         End If
 
         ' Validate all items
@@ -41,13 +57,22 @@ Public Class Form1
             Dim fn = Path.GetFileNameWithoutExtension(f)
             If fn.EndsWith("_2ch") Then Continue For
             FileList.Add(f)
+            My.Settings.LastFileList.Add(f)
             LstFiles.Items.Add(fn)
         Next
+
+        ' save last file list settings
+        My.Settings.Save()
     End Sub
 
     Private Sub MenuEditClearFiles_Click(sender As Object, e As EventArgs) Handles MenuEditClearFiles.Click
+        ClearFiles()
+    End Sub
+    Sub ClearFiles()
         LstFiles.Items.Clear()
         FileList.Clear()
+        My.Settings.LastFileList.Clear()
+        My.Settings.Save()
     End Sub
 
     Private Sub BtnGroup_Click(sender As Object, e As EventArgs) Handles BtnGroup.Click
@@ -160,7 +185,7 @@ Public Class Form1
                             UpdateVolume(Wave, 100)
                         Next
 
-                        Dim BtnExportMix As New Button With {.AutoSize = True, .Text = "Export Mix"}
+                        Dim BtnExportMix As New Button With {.Size = New Size(110, 23), .Text = "Export Mix"}
                         AddHandler BtnExportMix.Click,
                         Sub()
                             SoundOut.Stop()
@@ -183,7 +208,7 @@ Public Class Form1
                         End Sub
                         PnlMixer.Controls.Add(BtnExportMix)
 
-                        Dim BtnMuteAll As New Button With {.AutoSize = True, .Text = "Mute All"}
+                        Dim BtnMuteAll As New Button With {.Size = New Size(110, 23), .Text = "Mute All"}
                         AddHandler BtnMuteAll.Click,
                         Sub()
                             For Each ctrl In BtnMuteAll.Parent.Controls
@@ -197,23 +222,25 @@ Public Class Form1
                         For i = 0 To Waves.Count - 1
                             Dim WAV = Waves(i)
                             Dim f = WaveNames(i)
+                            Dim f_ = Path.GetFileNameWithoutExtension(f)
+                            If f_.EndsWith(".wem") Then f_ = f_.Substring(0, f_.Length - 4)
                             Dim Index = i
 
-                            Dim Lbl As New Label With {.AutoSize = True, .Text = Path.GetFileNameWithoutExtension(f)}
-                            If FileDict.Keys.Contains(f) Then
-                                Lbl.Text = FileDict(f)
+                            Dim Lbl As New Label With {.AutoSize = True, .Text = f_}
+                            If FileDict.Keys.Contains(f_) Then
+                                Lbl.Text = FileDict(f_)
                             End If
                             AddHandler Lbl.DoubleClick,
                             Sub()
                                 Dim NewName = InputBox("What should we remember this file as? Leave blank to cancel.")
                                 If String.IsNullOrWhiteSpace(NewName) Then Exit Sub
                                 If Not FileDict.Keys.Contains(f) Then
-                                    FileDict.Add(f, NewName)
+                                    FileDict.Add(f_, NewName)
                                 Else
-                                    FileDict(f) = NewName
+                                    FileDict(f_) = NewName
                                 End If
 
-                                Lbl.Text = FileDict(f)
+                                Lbl.Text = FileDict(f_)
                                 SaveDict()
                             End Sub
                             Dim VolSlider As New TrackBar With {
@@ -272,6 +299,7 @@ Public Class Form1
                 Dim ii = i - Offset
                 If ii > -1 AndAlso ii < LstFiles.Items.Count Then
                     FileList.RemoveAt(ii)
+                    My.Settings.LastFileList.RemoveAt(ii)
                     LstFiles.Items.RemoveAt(ii)
                 End If
                 Offset += 1
@@ -304,27 +332,6 @@ Public Class Form1
         If FileDict Is Nothing Then
             FileDict = New Dictionary(Of String, String)()
         End If
-
-
-        Dim proc As New Process With {.EnableRaisingEvents = True, .StartInfo = New ProcessStartInfo With {
-            .CreateNoWindow = True,
-            .RedirectStandardOutput = True,
-            .RedirectStandardError = True,
-            .UseShellExecute = False,
-            .WindowStyle = ProcessWindowStyle.Hidden,
-            .WorkingDirectory = "C:\Users\booge\Documents\GitHub\Pikmin4SoundSorter\Pikmin4SoundSorter\vgmstream",
-            .FileName = "C:\Users\booge\Documents\GitHub\Pikmin4SoundSorter\Pikmin4SoundSorter\vgmstream\vgmstream-cli.exe",
-            .Arguments = "-o ""test.wav"" ""test.wem"""
-        }}
-
-        AddHandler proc.Exited,
-                Sub()
-                    MsgBox("Finished!")
-                End Sub
-
-        'proc.Start()
-        'proc.BeginOutputReadLine()
-        'proc.BeginErrorReadLine()
     End Sub
 
     Sub SaveDict()
@@ -333,6 +340,10 @@ Public Class Form1
     End Sub
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         SaveDict()
+    End Sub
+    Private Sub ConvertToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ConvertToolStripMenuItem.Click
+        SetFormCenter(Me, FormConverter)
+        FormConverter.ShowDialog()
     End Sub
 
     Private Sub WhatDoIDoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles WhatDoIDoToolStripMenuItem.Click
@@ -345,9 +356,41 @@ A mixer shows on the right to adjust volume of layers, and even export your mix.
 "What Do I Do?")
     End Sub
 
-    Private Sub ConvertToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ConvertToolStripMenuItem.Click
-        FormConverter.SetDesktopLocation(Left + ClientSize.Width / 2 - FormConverter.ClientSize.Width / 2, Top + ClientSize.Height / 2 - FormConverter.ClientSize.Height / 2)
-        FormConverter.ShowDialog()
+    Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
+        MessageBox.Show("Pikmin 4 Sound Sorter
+Version " + Application.ProductVersion + "
+
+A simple GUI that takes your .WAVs, sorts them by duration, and lets you mix them.
+
+Made by Jimble",
+"About")
+    End Sub
+
+    Private Sub OpenFolderToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenFolderToolStripMenuItem.Click
+        If DialogOpenFolder.ShowDialog() = CommonFileDialogResult.Ok Then
+            OpenFiles({DialogOpenFolder.FileName})
+        End If
+    End Sub
+
+    Private Sub OpenFilesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenFilesToolStripMenuItem.Click
+        If DialogOpenFiles.ShowDialog() = CommonFileDialogResult.Ok Then
+            OpenFiles(DialogOpenFiles.FileNames)
+        End If
+    End Sub
+
+    Private Sub SaveDictionaryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveDictionaryToolStripMenuItem.Click
+        SetFormCenter(Me, Dictionary)
+        Dictionary.ShowDialog()
+    End Sub
+
+    Private Sub OpenLastToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenLastToolStripMenuItem.Click
+        If My.Settings.LastFileList Is Nothing Then Exit Sub
+        Dim Files = New List(Of String)()
+        For Each f In My.Settings.LastFileList
+            Files.Add(f)
+        Next
+        ClearFiles()
+        OpenFiles(Files.ToArray())
     End Sub
 End Class
 

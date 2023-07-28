@@ -28,7 +28,7 @@ Partial Class FormConverter
         Me.BtnBrowseOutput = New System.Windows.Forms.Button()
         Me.TxtOutput = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.LabelDropFiles = New System.Windows.Forms.Label()
         Me.BtnConvert = New System.Windows.Forms.Button()
         Me.TxtTerminal = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -98,18 +98,18 @@ Partial Class FormConverter
         Me.Label2.TabIndex = 9
         Me.Label2.Text = "Output directory"
         '
-        'Label3
+        'LabelDropFiles
         '
-        Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.Label3.AutoSize = True
-        Me.Label3.BackColor = System.Drawing.Color.White
-        Me.Label3.Enabled = False
-        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(41, 105)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(55, 60)
-        Me.Label3.TabIndex = 10
-        Me.Label3.Text = "DROP" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "FILES" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "HERE"
+        Me.LabelDropFiles.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelDropFiles.AutoSize = True
+        Me.LabelDropFiles.BackColor = System.Drawing.Color.White
+        Me.LabelDropFiles.Enabled = False
+        Me.LabelDropFiles.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelDropFiles.Location = New System.Drawing.Point(43, 105)
+        Me.LabelDropFiles.Name = "LabelDropFiles"
+        Me.LabelDropFiles.Size = New System.Drawing.Size(55, 60)
+        Me.LabelDropFiles.TabIndex = 10
+        Me.LabelDropFiles.Text = "DROP" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "FILES" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "HERE"
         '
         'BtnConvert
         '
@@ -147,6 +147,7 @@ Partial Class FormConverter
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(467, 270)
+        Me.Controls.Add(Me.LabelDropFiles)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.TxtTerminal)
         Me.Controls.Add(Me.BtnConvert)
@@ -156,7 +157,6 @@ Partial Class FormConverter
         Me.Controls.Add(Me.BtnBrowseOutput)
         Me.Controls.Add(Me.TxtOutput)
         Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Label3)
         Me.Name = "FormConverter"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "WEM Converter"
@@ -171,7 +171,7 @@ Partial Class FormConverter
     Friend WithEvents BtnBrowseOutput As Button
     Friend WithEvents TxtOutput As TextBox
     Friend WithEvents Label2 As Label
-    Friend WithEvents Label3 As Label
+    Friend WithEvents LabelDropFiles As Label
     Friend WithEvents BtnConvert As Button
     Friend WithEvents TxtTerminal As TextBox
     Friend WithEvents Label4 As Label

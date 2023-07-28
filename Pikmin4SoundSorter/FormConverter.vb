@@ -59,6 +59,7 @@ Public Class FormConverter
         For Each f In Files
             If Not File.Exists(f) Then Continue For
             If Path.GetExtension(f).ToLower() <> ".wem" Then Continue For
+            LabelDropFiles.Visible = False
             FileList.Add(f)
             LstFiles.Items.Add(Path.GetFileName(f))
         Next
@@ -87,6 +88,16 @@ Public Class FormConverter
                     LstFiles.Items.RemoveAt(ii)
                 End If
                 Offset += 1
+            Next
+
+            If LstFiles.Items.Count = 0 Then
+                LabelDropFiles.Visible = True
+            End If
+        End If
+
+        If (e.Control) AndAlso (e.KeyCode And Not Keys.Modifiers) = Keys.A Then
+            For i = 0 To LstFiles.Items.Count - 1
+                LstFiles.SetSelected(i, True)
             Next
         End If
     End Sub
