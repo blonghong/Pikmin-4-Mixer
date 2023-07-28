@@ -76,9 +76,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.WAVSorterForPikmin4.My.MySettings
+        Friend ReadOnly Property Settings() As Global.Pikmin4SoundSorter.My.MySettings
             Get
-                Return Global.WAVSorterForPikmin4.My.MySettings.Default
+                Return Global.Pikmin4SoundSorter.My.MySettings.Default
             End Get
         End Property
     End Module
