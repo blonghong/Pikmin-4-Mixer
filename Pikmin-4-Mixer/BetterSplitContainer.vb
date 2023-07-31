@@ -6,6 +6,7 @@ Public Class BetterSplitContainer
 
     Public Property Panel1Collapsible() As Boolean = True
     Public Property Panel2Collapsible() As Boolean = False
+    Public Property DrawSplitter() As Boolean = True
     Event OnPanel1Collapsing(ByVal sender As Object, ByVal e As EventArgs)
     Event OnPanel2Collapsing(ByVal sender As Object, ByVal e As EventArgs)
     Event OnPanel1Collapsed(ByVal sender As Object, ByVal e As EventArgs)
@@ -64,6 +65,14 @@ Public Class BetterSplitContainer
         If z > 0 AndAlso z < max Then
             SplitterDistance = z
             Invalidate()
+        End If
+    End Sub
+
+    Private Sub BetterSplitContainer_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
+        If DrawSplitter Then
+            Dim r = e.ClipRectangle
+            r.Inflate(-1, -1)
+            e.Graphics.FillRectangle(Brushes.Gray, r)
         End If
     End Sub
 End Class

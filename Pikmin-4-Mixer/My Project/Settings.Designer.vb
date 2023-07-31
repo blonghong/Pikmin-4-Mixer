@@ -76,6 +76,30 @@ Namespace My
                 Me("LastFileList") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property UserGroups() As String
+            Get
+                Return CType(Me("UserGroups"),String)
+            End Get
+            Set
+                Me("UserGroups") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property GroupNames() As String
+            Get
+                Return CType(Me("GroupNames"),String)
+            End Get
+            Set
+                Me("GroupNames") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
