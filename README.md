@@ -18,6 +18,6 @@ This GUI will take your Pikmin 4 audio files and group them based on their durat
 
 Since this is a fairly basic utility, only minor improvemnts can be made. Feel free to open issues or pull requests.
 
-![Pikmin 4 Mixer Main Window](https://i.imgur.com/lP2cXf5.png)
+![Pikmin 4 Mixer Main Window](https://i.imgur.com/N5DD1vI.png)
 ![Pikmin 4 Mixer Dictionary](https://i.imgur.com/LHj58OS.png)
 ![Pikmin 4 Mixer WEM Converter](https://i.imgur.com/1Om92aU.png)
